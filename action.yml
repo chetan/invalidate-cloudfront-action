@@ -1,6 +1,9 @@
 name: 'Invalidate Cloudfront'
 description: 'Invalidate Cloudfront distribution paths'
 author: 'Pixelcop Research, Inc.'
+branding:
+  icon: 'cloud-lightning'
+  color: 'orange'
 runs:
   using: 'docker'
   image: 'Dockerfile'
