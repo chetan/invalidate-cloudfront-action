@@ -1,0 +1,6 @@
+name: 'Invalidate Cloudfront'
+description: 'Invalidate Cloudfront distribution paths'
+author: 'Pixelcop Research, Inc.'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
