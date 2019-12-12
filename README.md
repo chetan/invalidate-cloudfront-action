@@ -72,3 +72,23 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 ```
+
+### AWS IAM Policy
+
+In order to use this action, you will need to supply an access key pair which has, at minimum, the following permission:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "cloudfront:CreateInvalidation",
+            "Resource": "arn:aws:cloudfront::<account id>:distribution/*"
+        }
+    ]
+}
+```
+
+Note that cloudfront [does not support resource-level permissions](https://stackoverflow.com/a/44373795/1777780).
