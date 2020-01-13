@@ -47,6 +47,12 @@ ${AWS_REGION}
 text
 EOF
 
+# Set it here to avoid logging keys/secrets
+if [ "$DEBUG" = "1" ]; then
+  echo "*** Enabling debug output (set -x)"
+  set -x
+fi
+
 # Use our dedicated profile and suppress verbose messages.
 # All other flags are optional via `args:` directive.
 aws --profile invalidate-cloudfront-action \
