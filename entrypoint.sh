@@ -58,5 +58,5 @@ fi
 aws --profile invalidate-cloudfront-action \
   cloudfront create-invalidation \
   --distribution-id "$DISTRIBUTION" \
-  --paths "$PATHS" \
+  --paths $PATHS \
   $*
