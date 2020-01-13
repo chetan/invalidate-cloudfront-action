@@ -73,6 +73,19 @@ jobs:
 
 ```
 
+### Configuration
+
+Param | Required? | Description
+----- | --------- | -----------
+DISTRIBUTION | yes |  Cloudfront distribution ID to operate on, e.g., 'EDFDVBD6EXAMPLE'
+PATHS | yes | A list of one or more space-separated paths to invalidate
+AWS_REGION | yes | AWS Region to operate in
+AWS_ACCESS_KEY_ID | yes | Access key with necessary permissions to invalidate objects in the target distribution (see below)
+AWS_SECRET_ACCESS_KEY | yes | Secret key
+DEBUG | no | When set to "1", prints the final awscli invalidation command for troubleshooting purposes
+
+See also: [AWS CLI reference](https://docs.aws.amazon.com/cli/latest/reference/cloudfront/create-invalidation.html)
+
 ### AWS IAM Policy
 
 In order to use this action, you will need to supply an access key pair which has, at minimum, the following permission:
