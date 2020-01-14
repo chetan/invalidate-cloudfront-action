@@ -1,4 +1,4 @@
-#!/bin/sh -l
+#!/bin/bash -l
 
 set -e
 
@@ -53,10 +53,14 @@ if [ "$DEBUG" = "1" ]; then
   set -x
 fi
 
+# Handle multiple space-separated args but still quote each arg to avoid any
+# globbing of args containing wildcards. i.e., if PATHS="/* /foo"
+IFS=', ' read -r -a PATHS_ARR <<< "$PATHS"
+
 # Use our dedicated profile and suppress verbose messages.
 # All other flags are optional via `args:` directive.
 aws --profile invalidate-cloudfront-action \
   cloudfront create-invalidation \
   --distribution-id "$DISTRIBUTION" \
-  --paths $PATHS \
+  --paths "${PATHS_ARR[@]}" \
   $*
