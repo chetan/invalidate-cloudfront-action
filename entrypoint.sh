@@ -1,6 +1,6 @@
 #!/bin/bash -l
 
-set -e
+set -eo pipefail
 
 # check configuration
 
@@ -11,8 +11,8 @@ if [ -z "$DISTRIBUTION" ]; then
   err=1
 fi
 
-if [ -z "$PATHS" ]; then
-  echo "error: PATHS is not set"
+if [[ -z "$PATHS" && -z "$PATHS_FROM" ]]; then
+  echo "error: PATHS or PATHS_FROM is not set"
   err=1
 fi
 
@@ -51,6 +51,16 @@ EOF
 if [ "$DEBUG" = "1" ]; then
   echo "*** Enabling debug output (set -x)"
   set -x
+fi
+
+if [[ -n "$PATHS_FROM" && -f $PATHS_FROM ]]; then
+  echo "*** Reading PATHS from $PATHS_FROM"
+  PATHS=$(cat $PATHS_FROM)
+  echo "PATHS=$PATHS"
+  if [[ -z "$PATHS" ]]; then
+    echo "PATHS is empty. nothing to do. exiting"
+    exit 0
+  fi
 fi
 
 # Handle multiple space-separated args but still quote each arg to avoid any
