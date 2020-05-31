@@ -115,9 +115,10 @@ Example workflow steps:
 
 - name: get updated files
   run: |
-    # no pipefail so we can allow grep to fail quietly
-    set -e
+    # allow grep to fail
+    set +e
     FILES=$(git log --stat="1000" -1 | grep '|' | awk '{print "/"$1}' | grep -e '\.html$')
+    set -e
     [ -z "$FILES" ] && touch .updated_files && exit 0
     for file in $FILES; do
       echo $file
