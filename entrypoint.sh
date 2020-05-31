@@ -53,8 +53,12 @@ if [ "$DEBUG" = "1" ]; then
   set -x
 fi
 
-if [[ -n "$PATHS_FROM" && -f $PATHS_FROM ]]; then
+if [[ -n "$PATHS_FROM" ]]; then
   echo "*** Reading PATHS from $PATHS_FROM"
+  if [[ ! -f  $PATHS_FROM ]]; then
+    echo "PATHS file not found. nothing to do. exiting"
+    exit 0
+  fi
   PATHS=$(cat $PATHS_FROM)
   echo "PATHS=$PATHS"
   if [[ -z "$PATHS" ]]; then
