@@ -124,7 +124,7 @@ Example workflow steps:
       echo $file
       # add bare directory to list of updated paths when we see index.html
       [[ "$file" == *"/index.html" ]] && echo $file | sed -e 's/\/index.html$/\//'
-    done | sort | uniq | tr '\n' ' ' > .updated_filess
+    done | sort | uniq | tr '\n' ' ' > .updated_files
 
 - name: invalidate
   uses: chetan/invalidate-cloudfront-action@master
