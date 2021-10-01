@@ -63,7 +63,7 @@ jobs:
 
     # Invalidate Cloudfront (this action)
     - name: invalidate
-      uses: chetan/invalidate-cloudfront-action@master
+      uses: chetan/invalidate-cloudfront-action@v2
       env:
         DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
         PATHS: '/index.html'
@@ -127,7 +127,7 @@ Example workflow steps:
     done | sort | uniq | tr '\n' ' ' > .updated_files
 
 - name: invalidate
-  uses: chetan/invalidate-cloudfront-action@master
+  uses: chetan/invalidate-cloudfront-action@v2
   env:
     PATHS_FROM: .updated_files
     AWS_REGION: 'us-east-1'
