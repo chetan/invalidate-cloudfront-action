@@ -5,5 +5,7 @@ branding:
   icon: 'cloud-lightning'
   color: 'orange'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: "composite"
+  steps:
+    - run: ${{ github.action_path }}/entrypoint.sh
+      shell: bash
