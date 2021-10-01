@@ -1,0 +1,23 @@
+name: 'Test Suite'
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to run tests on'
+        required: true
+        default: 'test'
+
+jobs:
+  test-ubuntu:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: invalidate
+      uses: ./
+      env:
+        PATHS: /robots.txt
+        DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
+        AWS_REGION: "us-east-1"
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
