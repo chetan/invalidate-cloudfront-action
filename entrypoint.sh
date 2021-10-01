@@ -73,7 +73,7 @@ IFS=', ' read -r -a PATHS_ARR <<< "$PATHS"
 
 # Use our dedicated profile and suppress verbose messages.
 # All other flags are optional via `args:` directive.
-aws --profile invalidate-cloudfront-action \
+aws --no-cli-pager --profile invalidate-cloudfront-action \
   cloudfront create-invalidation \
   --distribution-id "$DISTRIBUTION" \
   --paths "${PATHS_ARR[@]}" \
