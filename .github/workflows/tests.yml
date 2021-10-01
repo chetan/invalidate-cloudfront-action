@@ -23,6 +23,7 @@ jobs:
     - name: invalidate
       uses: ./
       env:
+        DEBUG: "1"
         PATHS: /robots.txt
         DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
         AWS_REGION: "us-east-1"
