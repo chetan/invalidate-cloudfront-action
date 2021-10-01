@@ -9,8 +9,12 @@ on:
         default: 'test'
 
 jobs:
-  test-ubuntu:
-    runs-on: ubuntu-latest
+  tests:
+    name: 'Test ${{ matrix.os }}'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
     - name: checkout
