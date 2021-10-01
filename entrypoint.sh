@@ -67,12 +67,11 @@ if [[ -n "$PATHS_FROM" ]]; then
   fi
 fi
 
-env
-
 # Handle multiple space-separated args but still quote each arg to avoid any
 # globbing of args containing wildcards. i.e., if PATHS="/* /foo"
 IFS=' ' read -r -a PATHS_ARR <<< "$PATHS"
-JSON_PATHS=$(jq --null-input --compact-output --monochrome-output --arg inarr "${PATHS}" '$inarr | split(" ")')
+echo "${PATHS}" > "${RUNNER_TEMP}/paths.txt"
+JSON_PATHS=$(jq --null-input --compact-output --monochrome-output --rawfile inarr "${RUNNER_TEMP}/paths.txt" '$inarr | split(" ")')
 LEN="${#PATHS_ARR[@]}"
 CR=$(date +"%s")
 cat <<-EOF > "${RUNNER_TEMP}/invalidation-batch.json"
