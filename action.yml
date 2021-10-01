@@ -4,8 +4,10 @@ author: 'Pixelcop Research, Inc.'
 branding:
   icon: 'cloud-lightning'
   color: 'orange'
+
 runs:
   using: "composite"
   steps:
-    - run: ${{ github.action_path }}/entrypoint.sh
-      shell: bash
+    - shell: bash
+      run: |
+        $GITHUB_ACTION_PATH/entrypoint.sh

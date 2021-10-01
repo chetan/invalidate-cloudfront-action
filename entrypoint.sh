@@ -76,5 +76,4 @@ IFS=', ' read -r -a PATHS_ARR <<< "$PATHS"
 aws --no-cli-pager --profile invalidate-cloudfront-action \
   cloudfront create-invalidation \
   --distribution-id "$DISTRIBUTION" \
-  --paths "${PATHS_ARR[@]}" \
-  $*
+  --paths "${PATHS_ARR[@]}"
