@@ -69,11 +69,21 @@ fi
 
 # Handle multiple space-separated args but still quote each arg to avoid any
 # globbing of args containing wildcards. i.e., if PATHS="/* /foo"
-IFS=', ' read -r -a PATHS_ARR <<< "$PATHS"
+IFS=' ' read -r -a PATHS_ARR <<< "$PATHS"
+JSON_PATHS=$(jq --null-input --compact-output --monochrome-output --arg inarr "${PATHS}" '$inarr | split(" ")')
+LEN="${#PATHS_ARR[@]}"
+CR=$(date +"%s")
+cat <<-EOF > "${RUNNER_TEMP}/invalidation-batch.json"
+{ "InvalidationBatch": { "Paths": { "Quantity": ${LEN}, "Items": ${JSON_PATHS} }, "CallerReference": "${CR}" } }
+EOF
+
+if [ "$DEBUG" = "1" ]; then
+  echo "> wrote ${RUNNER_TEMP}/invalidation-batch.json"
+  cat "${RUNNER_TEMP}/invalidation-batch.json"
+fi
 
 # Use our dedicated profile and suppress verbose messages.
-# All other flags are optional via `args:` directive.
 aws --no-cli-pager --profile invalidate-cloudfront-action \
   cloudfront create-invalidation \
   --distribution-id "$DISTRIBUTION" \
-  --paths "${PATHS_ARR[@]}"
+  --cli-input-json "file://${RUNNER_TEMP}/invalidation-batch.json"
