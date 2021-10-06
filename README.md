@@ -1,6 +1,6 @@
-# Invalidate Cloudfront action
+# Invalidate AWS CloudFront action
 
-A GitHub Workflow Action which invalidates the given Cloudfront distribution paths.
+A GitHub Workflow Action which invalidates the given CloudFront distribution paths.
 
 ## Usage
 
@@ -61,9 +61,9 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-    # Invalidate Cloudfront (this action)
+    # Invalidate CloudFront (this action)
     - name: invalidate
-      uses: chetan/invalidate-cloudfront-action@master
+      uses: chetan/invalidate-cloudfront-action@v2
       env:
         DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
         PATHS: '/index.html'
@@ -79,7 +79,7 @@ Param | Required? | Description
 ----- | --------- | -----------
 PATHS | yes* | A list of one or more space-separated paths to invalidate
 PATHS_FROM | yes* | Filename to read list of paths from
-DISTRIBUTION | yes |  Cloudfront distribution ID to operate on, e.g., 'EDFDVBD6EXAMPLE'
+DISTRIBUTION | yes |  CloudFront distribution ID to operate on, e.g., 'EDFDVBD6EXAMPLE'
 AWS_REGION | yes | AWS Region to operate in
 AWS_ACCESS_KEY_ID | yes | Access key with necessary permissions to invalidate objects in the target distribution (see below)
 AWS_SECRET_ACCESS_KEY | yes | Secret key
