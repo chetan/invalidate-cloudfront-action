@@ -1,9 +1,9 @@
-name: 'Invalidate Cloudfront'
-description: 'Invalidate Cloudfront distribution paths'
-author: 'Pixelcop Research, Inc.'
+name: "Invalidate AWS CloudFront"
+description: "Invalidate CloudFront distribution paths"
+author: "Pixelcop Research, Inc."
 branding:
-  icon: 'cloud-lightning'
-  color: 'orange'
+  icon: "cloud-lightning"
+  color: "orange"
 
 runs:
   using: "composite"
