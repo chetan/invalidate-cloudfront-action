@@ -5,7 +5,7 @@ on:
     inputs:
       branch:
         description: 'Branch to run tests on'
-        required: true
+        required: false
         default: 'test'
 
 jobs:
@@ -19,6 +19,8 @@ jobs:
     steps:
     - name: checkout
       uses: actions/checkout@v2
+      with:
+        ref: "${{ inputs.branch }}"
 
     - name: invalidate
       uses: ./
