@@ -1,5 +1,12 @@
 # Invalidate AWS CloudFront Action Changelog
 
+## v2.1
+
+### Fixes
+
+- corrected handling of file input via `PATHS_FROM` (properly paths, one per
+  line)
+
 ## v2.0
 
 ### Additions
