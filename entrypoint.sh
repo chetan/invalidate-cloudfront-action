@@ -59,7 +59,7 @@ if [[ -n "$PATHS_FROM" ]]; then
     echo "PATHS file not found. nothing to do. exiting"
     exit 0
   fi
-  PATHS=$(cat $PATHS_FROM)
+  PATHS=$(cat $PATHS_FROM | tr '\n' ' ')
   echo "PATHS=$PATHS"
   if [[ -z "$PATHS" ]]; then
     echo "PATHS is empty. nothing to do. exiting"
@@ -71,7 +71,7 @@ fi
 # i.e., if PATHS="/* /foo"
 IFS=' ' read -r -a PATHS_ARR <<< "$PATHS"
 echo -n "${PATHS}" > "${RUNNER_TEMP}/paths.txt"
-JSON_PATHS=$(jq --null-input --compact-output --monochrome-output --rawfile inarr "${RUNNER_TEMP}/paths.txt" '$inarr | rtrimstr("\n") | split(" ")')
+JSON_PATHS=$(jq --null-input --compact-output --monochrome-output --rawfile inarr "${RUNNER_TEMP}/paths.txt" '$inarr | rtrimstr(" ") | rtrimstr("\n") | split(" ")')
 LEN="${#PATHS_ARR[@]}"
 CR=$(date +"%s")
 cat <<-EOF > "${RUNNER_TEMP}/invalidation-batch.json"
