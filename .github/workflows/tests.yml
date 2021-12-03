@@ -22,11 +22,43 @@ jobs:
         with:
           ref: "${{ inputs.branch }}"
 
-      - name: invalidate
+      - name: invalidate PATHS
         uses: ./
         env:
           DEBUG: "1"
           PATHS: /robots* /index.html
+          DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
+          AWS_REGION: "us-east-1"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: create path files
+        run: |
+          cat << EOF > paths1.txt
+          robots.txt
+          *.xml
+          EOF
+
+          cat << EOF > paths2.txt
+          robots.txt
+          *.xml
+          EOF
+
+      - name: invalidate PATHS_FROM 1
+        uses: ./
+        env:
+          DEBUG: "1"
+          PATHS_FROM: paths1.txt
+          DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
+          AWS_REGION: "us-east-1"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: invalidate PATHS_FROM 2
+        uses: ./
+        env:
+          DEBUG: "1"
+          PATHS_FROM: paths2.txt
           DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
           AWS_REGION: "us-east-1"
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
