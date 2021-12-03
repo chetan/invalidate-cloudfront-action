@@ -33,6 +33,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: create path files
+        shell: bash
         run: |
           cat << EOF > paths1.txt
           /robots.txt
