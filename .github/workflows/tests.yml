@@ -1,33 +1,33 @@
-name: 'Test Suite'
+name: "Test Suite"
 
 on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch to run tests on'
+        description: "Branch to run tests on"
         required: false
-        default: 'test'
+        default: "test"
 
 jobs:
   tests:
-    name: 'Test ${{ matrix.os }}'
+    name: "Test ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-    - name: checkout
-      uses: actions/checkout@v2
-      with:
-        ref: "${{ inputs.branch }}"
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          ref: "${{ inputs.branch }}"
 
-    - name: invalidate
-      uses: ./
-      env:
-        DEBUG: "1"
-        PATHS: /robots* /index.html
-        DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
-        AWS_REGION: "us-east-1"
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: invalidate
+        uses: ./
+        env:
+          DEBUG: "1"
+          PATHS: /robots* /index.html
+          DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
+          AWS_REGION: "us-east-1"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
