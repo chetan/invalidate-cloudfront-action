@@ -155,3 +155,19 @@ In order to use this action, you will need to supply an access key pair which ha
 ```
 
 Note that cloudfront [does not support resource-level permissions](https://stackoverflow.com/a/44373795/1777780).
+
+### Self-hosted runners
+
+A note regarding [self-hosted
+runners](https://docs.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners):
+
+`V2` of the `invalidate-cloudfront-action` executes via a bash script on the
+runner and requires the following additional tools:
+
+- jq
+- aws
+- tr
+- date
+
+Please ensure that they are available on your system or use V1 of the action,
+which executes within a docker container.
