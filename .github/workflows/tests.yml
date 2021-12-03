@@ -35,13 +35,12 @@ jobs:
       - name: create path files
         run: |
           cat << EOF > paths1.txt
-          robots.txt
-          *.xml
+          /robots.txt
+          /*.xml
           EOF
 
           cat << EOF > paths2.txt
-          robots.txt
-          *.xml
+          /robots.txt /*.xml
           EOF
 
       - name: invalidate PATHS_FROM 1
