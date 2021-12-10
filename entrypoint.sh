@@ -99,7 +99,9 @@ if [ "$DEBUG" = "1" ]; then
 fi
 
 # Use our dedicated profile and suppress verbose messages.
-aws --no-cli-pager --profile invalidate-cloudfront-action \
+# Support v1.x of the awscli which does not have this flag
+[[ "$(aws --version)" =~ "cli/2" ]] && pagerflag="--no-cli-pager"
+aws $pagerflag --profile invalidate-cloudfront-action \
   cloudfront create-invalidation \
   --distribution-id "$DISTRIBUTION" \
   --cli-input-json "file://${RUNNER_TEMP}/invalidation-batch.json"
