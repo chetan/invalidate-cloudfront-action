@@ -109,8 +109,8 @@ runners](https://docs.github.com/en/actions/hosting-your-own-runners/about-self-
 `V2` of the `invalidate-cloudfront-action` executes via a bash script on the
 runner and requires the following additional tools:
 
-- jq
-- aws
+- jq 1.6
+- aws 1.x+
 - tr
 - date
 
