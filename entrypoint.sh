@@ -88,7 +88,7 @@ IFS=' ' read -r -a PATHS_ARR <<< "$PATHS"
 echo -n "${PATHS}" > "${RUNNER_TEMP}/paths.txt"
 JSON_PATHS=$($jq --null-input --compact-output --monochrome-output --rawfile inarr "${RUNNER_TEMP}/paths.txt" '$inarr | rtrimstr(" ") | rtrimstr("\n") | split(" ")')
 LEN="${#PATHS_ARR[@]}"
-CR=$(date +"%s")
+CR="$(date +"%s")$RANDOM"
 cat <<-EOF > "${RUNNER_TEMP}/invalidation-batch.json"
 { "InvalidationBatch": { "Paths": { "Quantity": ${LEN}, "Items": ${JSON_PATHS} }, "CallerReference": "${CR}" } }
 EOF
