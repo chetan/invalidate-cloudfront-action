@@ -25,6 +25,8 @@ jobs:
       - name: print versions
         shell: bash
         run: |
+          uname
+          uname -a
           aws --version
           jq --version
           jq --help

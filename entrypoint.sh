@@ -53,6 +53,21 @@ if [ "$DEBUG" = "1" ]; then
   set -x
 fi
 
+# Ensure we have jq-1.6
+jq="jq"
+if  [[ "$($jq --version)" != "jq-1.6" ]]; then
+  if [[ $(uname) == "Darwin" ]]; then
+    jqbin="jq-osx-amd64"
+  elif [[ $(uname) == "Linux" ]]; then
+    jqbin="jq-linux64"
+  fi
+  if [[ -n "$jqbin" ]]; then
+    jq="/usr/local/bin/jq16"
+    wget -O $jq https://github.com/stedolan/jq/releases/download/jq-1.6/$jqbin
+    chmod 755 $jq
+  fi
+fi
+
 if [[ -n "$PATHS_FROM" ]]; then
   echo "*** Reading PATHS from $PATHS_FROM"
   if [[ ! -f  $PATHS_FROM ]]; then
@@ -71,7 +86,7 @@ fi
 # i.e., if PATHS="/* /foo"
 IFS=' ' read -r -a PATHS_ARR <<< "$PATHS"
 echo -n "${PATHS}" > "${RUNNER_TEMP}/paths.txt"
-JSON_PATHS=$(jq --null-input --compact-output --monochrome-output --rawfile inarr "${RUNNER_TEMP}/paths.txt" '$inarr | rtrimstr(" ") | rtrimstr("\n") | split(" ")')
+JSON_PATHS=$($jq --null-input --compact-output --monochrome-output --rawfile inarr "${RUNNER_TEMP}/paths.txt" '$inarr | rtrimstr(" ") | rtrimstr("\n") | split(" ")')
 LEN="${#PATHS_ARR[@]}"
 CR=$(date +"%s")
 cat <<-EOF > "${RUNNER_TEMP}/invalidation-batch.json"
