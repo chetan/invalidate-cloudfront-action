@@ -1,6 +1,6 @@
-# Invalidate Cloudfront action
+# Invalidate CloudFront action
 
-A GitHub Workflow Action which invalidates the given Cloudfront distribution paths.
+A GitHub Workflow Action for invalidating CloudFront distribution paths
 
 ## Usage
 
