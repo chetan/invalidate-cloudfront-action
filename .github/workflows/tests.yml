@@ -14,13 +14,20 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, ubuntu-18.04, windows-latest, macos-latest]
 
     steps:
       - name: checkout
         uses: actions/checkout@v2
         with:
           ref: "${{ inputs.branch }}"
+
+      - name: print versions
+        shell: bash
+        run: |
+          aws --version
+          jq --version
+          jq --help
 
       - name: invalidate PATHS
         uses: ./
