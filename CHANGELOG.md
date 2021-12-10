@@ -1,5 +1,11 @@
 # Invalidate AWS CloudFront Action Changelog
 
+## v2.2
+
+### Fixes
+
+- added support for Ubuntu 18.04 which has older versions of `jq` and `awscli`
+
 ## v2.1
 
 ### Fixes
