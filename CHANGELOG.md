@@ -1,5 +1,11 @@
 # Invalidate AWS CloudFront Action Changelog
 
+## v2.3
+
+### Fixes
+
+- support for AWS credentials via OIDC ([#12](https://github.com/chetan/invalidate-cloudfront-action/issues/12))
+
 ## v2.2
 
 ### Fixes

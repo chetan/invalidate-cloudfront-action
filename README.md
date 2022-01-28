@@ -81,9 +81,38 @@ Example workflow steps:
     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 ```
 
+### AWS Credentials
+
+The recommended way to pass AWS credentials to your GitHub actions is to use
+[OpenID
+Connect](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services).
+
+Once configured, you can use the
+[aws-actions/configure-aws-credentials](https://github.com/aws-actions/configure-aws-credentials)
+action to properly authentication and supply AWS credentials to subsequent steps
+in your workflow.
+
+Note that your workflow will need the following permission when using OIDC:
+
+```yaml
+permissions:
+  id-token: write
+```
+
+For a complete example, see the [workflow](./.github/workflows/tests.yml) in
+this repository.
+
+Also note that if you using the CloudFormation template from the aws repo above,
+the 'thumbprint' shown in the example is out of date. I've included a [working
+template](./docs/github-oidc.yaml) complete with the below IAM policy that
+should work out of the box (as of 2022-01-27).
+
+As an alternative, you may directly pass an access/secret key pair. See the
+config section above.
+
 ### AWS IAM Policy
 
-In order to use this action, you will need to supply an access key pair which has, at minimum, the following permission:
+In order to use this action, you will need to supply credentials which have, at minimum, the following permission:
 
 ```json
 {
@@ -93,13 +122,11 @@ In order to use this action, you will need to supply an access key pair which ha
             "Sid": "VisualEditor0",
             "Effect": "Allow",
             "Action": "cloudfront:CreateInvalidation",
-            "Resource": "arn:aws:cloudfront::<account id>:distribution/*"
+            "Resource": "arn:aws:cloudfront::<account id>:distribution/<distribution ID>"
         }
     ]
 }
 ```
-
-Note that cloudfront [does not support resource-level permissions](https://stackoverflow.com/a/44373795/1777780).
 
 ## Self-hosted runners
 
