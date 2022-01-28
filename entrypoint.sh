@@ -37,15 +37,19 @@ fi
 
 # run
 
-# Create a dedicated profile for this action to avoid
-# conflicts with other actions.
-# https://github.com/jakejarvis/s3-sync-action/issues/1
-aws configure --profile invalidate-cloudfront-action <<-EOF > /dev/null 2>&1
-${AWS_ACCESS_KEY_ID}
-${AWS_SECRET_ACCESS_KEY}
-${AWS_REGION}
-text
+if [[ -z "$AWS_SESSION_TOKEN" ]]; then
+  # AWS_SESSION_TOKEN will be set when using OIDC creds
+  # Create a dedicated profile for this action to avoid
+  # conflicts with other actions.
+  # https://github.com/jakejarvis/s3-sync-action/issues/1
+  _aws_profile="--profile invalidate-cloudfront-action"
+  aws configure $_aws_profile <<-EOF > /dev/null 2>&1
+  ${AWS_ACCESS_KEY_ID}
+  ${AWS_SECRET_ACCESS_KEY}
+  ${AWS_REGION}
+  text
 EOF
+fi
 
 # Set it here to avoid logging keys/secrets
 if [ "$DEBUG" = "1" ]; then
@@ -63,7 +67,7 @@ if  [[ ! -x "$(command -v $jq)" || "$($jq --version)" != "jq-1.6" ]]; then
   fi
   if [[ -n "$jqbin" ]]; then
     jq="/usr/local/bin/jq16"
-    wget -O $jq https://github.com/stedolan/jq/releases/download/jq-1.6/$jqbin
+    wget -nv -O $jq https://github.com/stedolan/jq/releases/download/jq-1.6/$jqbin
     chmod 755 $jq
   fi
 fi
@@ -101,7 +105,7 @@ fi
 # Use our dedicated profile and suppress verbose messages.
 # Support v1.x of the awscli which does not have this flag
 [[ "$(aws --version)" =~ "cli/2" ]] && pagerflag="--no-cli-pager"
-aws $pagerflag --profile invalidate-cloudfront-action \
+aws $pagerflag $_aws_profile \
   cloudfront create-invalidation \
   --distribution-id "$DISTRIBUTION" \
   --cli-input-json "file://${RUNNER_TEMP}/invalidation-batch.json"
