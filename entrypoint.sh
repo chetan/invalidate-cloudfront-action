@@ -37,20 +37,6 @@ fi
 
 # run
 
-# oif [[ -z "$AWS_SESSION_TOKEN" ]]; then
-#   # AWS_SESSION_TOKEN will be set when using OIDC creds
-#   # Create a dedicated profile for this action to avoid
-#   # conflicts with other actions.
-#   # https://github.com/jakejarvis/s3-sync-action/issues/1
-#   _aws_profile="--profile invalidate-cloudfront-action"
-#   aws configure $_aws_profile <<-EOF > /dev/null 2>&1
-#   ${AWS_ACCESS_KEY_ID}
-#   ${AWS_SECRET_ACCESS_KEY}
-#   ${AWS_REGION}
-#   text
-# EOF
-# fi
-
 # Set it here to avoid logging keys/secrets
 if [ "$DEBUG" = "1" ]; then
   echo "*** Enabling debug output (set -x)"
