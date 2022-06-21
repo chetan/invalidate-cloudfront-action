@@ -37,19 +37,19 @@ fi
 
 # run
 
-if [[ -z "$AWS_SESSION_TOKEN" ]]; then
-  # AWS_SESSION_TOKEN will be set when using OIDC creds
-  # Create a dedicated profile for this action to avoid
-  # conflicts with other actions.
-  # https://github.com/jakejarvis/s3-sync-action/issues/1
-  _aws_profile="--profile invalidate-cloudfront-action"
-  aws configure $_aws_profile <<-EOF > /dev/null 2>&1
-  ${AWS_ACCESS_KEY_ID}
-  ${AWS_SECRET_ACCESS_KEY}
-  ${AWS_REGION}
-  text
-EOF
-fi
+# oif [[ -z "$AWS_SESSION_TOKEN" ]]; then
+#   # AWS_SESSION_TOKEN will be set when using OIDC creds
+#   # Create a dedicated profile for this action to avoid
+#   # conflicts with other actions.
+#   # https://github.com/jakejarvis/s3-sync-action/issues/1
+#   _aws_profile="--profile invalidate-cloudfront-action"
+#   aws configure $_aws_profile <<-EOF > /dev/null 2>&1
+#   ${AWS_ACCESS_KEY_ID}
+#   ${AWS_SECRET_ACCESS_KEY}
+#   ${AWS_REGION}
+#   text
+# EOF
+# fi
 
 # Set it here to avoid logging keys/secrets
 if [ "$DEBUG" = "1" ]; then
@@ -59,7 +59,7 @@ fi
 
 # Ensure we have jq-1.6
 jq="jq"
-if  [[ ! -x "$(command -v $jq)" || "$($jq --version)" != "jq-1.6" ]]; then
+if [[ ! -x "$(command -v $jq)" || "$($jq --version)" != "jq-1.6" ]]; then
   if [[ $(uname) == "Darwin" ]]; then
     jqbin="jq-osx-amd64"
   elif [[ $(uname) == "Linux" ]]; then
@@ -74,7 +74,7 @@ fi
 
 if [[ -n "$PATHS_FROM" ]]; then
   echo "*** Reading PATHS from $PATHS_FROM"
-  if [[ ! -f  $PATHS_FROM ]]; then
+  if [[ ! -f $PATHS_FROM ]]; then
     echo "PATHS file not found. nothing to do. exiting"
     exit 0
   fi
@@ -88,12 +88,12 @@ fi
 
 # Handle multiple space-separated paths, particularly containing wildcards.
 # i.e., if PATHS="/* /foo"
-IFS=' ' read -r -a PATHS_ARR <<< "$PATHS"
-echo -n "${PATHS}" > "${RUNNER_TEMP}/paths.txt"
+IFS=' ' read -r -a PATHS_ARR <<<"$PATHS"
+echo -n "${PATHS}" >"${RUNNER_TEMP}/paths.txt"
 JSON_PATHS=$($jq --null-input --compact-output --monochrome-output --rawfile inarr "${RUNNER_TEMP}/paths.txt" '$inarr | rtrimstr(" ") | rtrimstr("\n") | split(" ")')
 LEN="${#PATHS_ARR[@]}"
 CR="$(date +"%s")$RANDOM"
-cat <<-EOF > "${RUNNER_TEMP}/invalidation-batch.json"
+cat <<-EOF >"${RUNNER_TEMP}/invalidation-batch.json"
 { "InvalidationBatch": { "Paths": { "Quantity": ${LEN}, "Items": ${JSON_PATHS} }, "CallerReference": "${CR}" } }
 EOF
 
@@ -102,10 +102,9 @@ if [ "$DEBUG" = "1" ]; then
   cat "${RUNNER_TEMP}/invalidation-batch.json"
 fi
 
-# Use our dedicated profile and suppress verbose messages.
 # Support v1.x of the awscli which does not have this flag
 [[ "$(aws --version)" =~ "cli/2" ]] && pagerflag="--no-cli-pager"
-aws $pagerflag $_aws_profile \
+aws $pagerflag \
   cloudfront create-invalidation \
   --distribution-id "$DISTRIBUTION" \
   --cli-input-json "file://${RUNNER_TEMP}/invalidation-batch.json"
