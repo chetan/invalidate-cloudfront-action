@@ -14,6 +14,7 @@ jobs:
     name: "Core tests on ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     strategy:
+      max-parallel: 1
       matrix:
         os: [ubuntu-latest, ubuntu-18.04, windows-latest, macos-latest]
 
@@ -129,7 +130,9 @@ jobs:
 
       - name: retry with invalid distribution
         uses: ./
+        continue-on-error: true
         env:
+          DEBUG_AWS: "1"
           DEBUG: "1"
           PATHS: /robots* /index.html
           DISTRIBUTION: ${{ secrets.DISTRIBUTION }}foobar
