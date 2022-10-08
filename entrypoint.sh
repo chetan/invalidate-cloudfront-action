@@ -94,6 +94,8 @@ if [ "$DEBUG" = "1" ]; then
   cat "${RUNNER_TEMP}/invalidation-batch.json"
 fi
 
+export AWS_MAX_ATTEMPTS=3
+
 # Support v1.x of the awscli which does not have this flag
 [[ "$(aws --version)" =~ "cli/2" ]] && aws_flags="${aws_flags} --no-cli-pager"
 aws $aws_flags \
