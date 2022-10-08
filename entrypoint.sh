@@ -5,6 +5,7 @@ set -eo pipefail
 # check configuration
 
 err=0
+aws_flags=""
 
 if [ -z "$DISTRIBUTION" ]; then
   echo "error: DISTRIBUTION is not set"
@@ -35,6 +36,10 @@ if [ $err -eq 1 ]; then
   exit 1
 fi
 
+if [ "$DEBUG_AWS" = "1" ]; then
+  aws_flags="${aws_flags} --debug"
+fi
+
 # run
 
 # Set it here to avoid logging keys/secrets
@@ -58,6 +63,7 @@ if [[ ! -x "$(command -v $jq)" || "$($jq --version)" != "jq-1.6" ]]; then
   fi
 fi
 
+# Slurp paths from file
 if [[ -n "$PATHS_FROM" ]]; then
   echo "*** Reading PATHS from $PATHS_FROM"
   if [[ ! -f $PATHS_FROM ]]; then
@@ -89,8 +95,8 @@ if [ "$DEBUG" = "1" ]; then
 fi
 
 # Support v1.x of the awscli which does not have this flag
-[[ "$(aws --version)" =~ "cli/2" ]] && pagerflag="--no-cli-pager"
-aws $pagerflag \
+[[ "$(aws --version)" =~ "cli/2" ]] && aws_flags="${aws_flags} --no-cli-pager"
+aws $aws_flags \
   cloudfront create-invalidation \
   --distribution-id "$DISTRIBUTION" \
   --cli-input-json "file://${RUNNER_TEMP}/invalidation-batch.json"
