@@ -10,98 +10,98 @@ on:
       - "test"
 
 jobs:
-  tests:
-    name: "Core tests on ${{ matrix.os }}"
-    runs-on: ${{ matrix.os }}
-    strategy:
-      max-parallel: 1
-      matrix:
-        os: [ubuntu-latest, ubuntu-18.04, windows-latest, macos-latest]
+  # core_tests:
+  #   name: "Core tests on ${{ matrix.os }}"
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     max-parallel: 1
+  #     matrix:
+  #       os: [ubuntu-latest, ubuntu-18.04, windows-latest, macos-latest]
 
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-        with:
-          ref: "${{ inputs.branch }}"
+  #   steps:
+  #     - name: checkout
+  #       uses: actions/checkout@v2
+  #       with:
+  #         ref: "${{ inputs.branch }}"
 
-      - name: print versions
-        shell: bash
-        run: |
-          uname
-          uname -a
-          aws --version
-          jq --version
-          jq --help
+  #     - name: print versions
+  #       shell: bash
+  #       run: |
+  #         uname
+  #         uname -a
+  #         aws --version
+  #         jq --version
+  #         jq --help
 
-      - name: invalidate PATHS
-        uses: ./
-        env:
-          DEBUG: "1"
-          PATHS: /robots* /index.html
-          DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
-          AWS_REGION: "us-east-1"
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     - name: invalidate PATHS
+  #       uses: ./
+  #       env:
+  #         DEBUG: "1"
+  #         PATHS: /robots* /index.html
+  #         DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
+  #         AWS_REGION: "us-east-1"
+  #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: create path files
-        shell: bash
-        run: |
-          cat << EOF > paths1.txt
-          /robots.txt
-          /*.xml
-          EOF
+  #     - name: create path files
+  #       shell: bash
+  #       run: |
+  #         cat << EOF > paths1.txt
+  #         /robots.txt
+  #         /*.xml
+  #         EOF
 
-          cat << EOF > paths2.txt
-          /robots.txt /*.xml
-          EOF
+  #         cat << EOF > paths2.txt
+  #         /robots.txt /*.xml
+  #         EOF
 
-      - name: invalidate PATHS_FROM 1
-        uses: ./
-        env:
-          DEBUG: "1"
-          PATHS_FROM: paths1.txt
-          DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
-          AWS_REGION: "us-east-1"
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     - name: invalidate PATHS_FROM 1
+  #       uses: ./
+  #       env:
+  #         DEBUG: "1"
+  #         PATHS_FROM: paths1.txt
+  #         DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
+  #         AWS_REGION: "us-east-1"
+  #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: invalidate PATHS_FROM 2
-        uses: ./
-        env:
-          DEBUG: "1"
-          PATHS_FROM: paths2.txt
-          DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
-          AWS_REGION: "us-east-1"
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     - name: invalidate PATHS_FROM 2
+  #       uses: ./
+  #       env:
+  #         DEBUG: "1"
+  #         PATHS_FROM: paths2.txt
+  #         DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
+  #         AWS_REGION: "us-east-1"
+  #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: configure aws credentials (access key)
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: "us-east-1"
+  #     - name: configure aws credentials (access key)
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: "us-east-1"
 
-      - name: invalidate PATHS using aws creds
-        uses: ./
-        env:
-          DEBUG: "1"
-          PATHS: /robots* /index.html
-          DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
+  #     - name: invalidate PATHS using aws creds
+  #       uses: ./
+  #       env:
+  #         DEBUG: "1"
+  #         PATHS: /robots* /index.html
+  #         DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
 
-      - name: configure aws credentials (oidc)
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-          role-session-name: TestSessionName
-          aws-region: "us-east-1"
+  #     - name: configure aws credentials (oidc)
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+  #         role-session-name: TestSessionName
+  #         aws-region: "us-east-1"
 
-      - name: invalidate PATHS using oidc creds
-        uses: ./
-        env:
-          DEBUG: "1"
-          PATHS: /robots* /index.html
-          DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
+  #     - name: invalidate PATHS using oidc creds
+  #       uses: ./
+  #       env:
+  #         DEBUG: "1"
+  #         PATHS: /robots* /index.html
+  #         DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
 
   experiment:
     name: "Experimental tests"
