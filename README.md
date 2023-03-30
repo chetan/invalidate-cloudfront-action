@@ -140,6 +140,7 @@ runner and requires the following additional tools:
 - aws 1.x+
 - tr
 - date
+- wget
 
 Please ensure that they are available on your system or use V1 of the action,
 which executes within a docker container.
