@@ -53,7 +53,7 @@ if [[ ! -x "$(command -v $jq)" || "$($jq --version)" != "jq-1.6" ]]; then
   fi
   if [[ -n "$jqbin" ]]; then
     jq="/usr/local/bin/jq16"
-    wget -nv -O $jq https://github.com/stedolan/jq/releases/download/jq-1.6/$jqbin
+    wget -nv -O $jq https://github.com/jqlang/jq/releases/download/jq-1.6/$jqbin
     chmod 755 $jq
   fi
 fi
