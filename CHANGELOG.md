@@ -1,11 +1,17 @@
 # Invalidate AWS CloudFront Action Changelog
 
-## v2.3.1
+## v2.4.1
 
 ### Fixes
 
 - updated jq github repository ([#21](https://github.com/chetan/invalidate-cloudfront-action/issues/21))
 
+
+## v2.4
+
+### Fixes
+
+- Simplified support for AWS credentials. No longer creates a separate AWS CLI profile as it is not needed for proper operation
 
 ## v2.3
 
