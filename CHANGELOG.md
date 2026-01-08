@@ -1,5 +1,12 @@
 # Invalidate AWS CloudFront Action Changelog
 
+## v2.3.1
+
+### Fixes
+
+- updated jq github repository ([#21](https://github.com/chetan/invalidate-cloudfront-action/issues/21))
+
+
 ## v2.3
 
 ### Fixes
