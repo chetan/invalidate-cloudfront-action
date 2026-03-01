@@ -48,19 +48,41 @@ if [ "$DEBUG" = "1" ]; then
   set -x
 fi
 
-# Ensure we have jq-1.6
+# Ensure we have jq-1.6 or above
 jq="jq"
-if [[ "$INSTALL_JQ" == "1" || ! -x "$(command -v $jq)" || "$($jq --version)" != "jq-1.6" ]]; then
+JQ_MIN_VER="1.6"
+
+check_jq() {
+  if ! command -v $jq >/dev/null 2>&1; then
+    return 1
+  fi
+  local version=$($jq --version | cut -d'-' -f2)
+  # Compare versions by removing all but the first period (e.g., 1.8.1 -> 1.81)
+  local clean_version=$(echo "$version" | sed 's/\.//2')
+  if (( $(echo "$clean_version < ${JQ_MIN_VER}" | bc -l) )); then
+    return 1
+  fi
+  return 0
+}
+
+install_jq() {
+  local jqbin
   if [[ $(uname) == "Darwin" ]]; then
     jqbin="jq-osx-amd64"
   elif [[ $(uname) == "Linux" ]]; then
     jqbin="jq-linux64"
+  else
+    echo "Unsupported OS for jq installation. Please install jq ${JQ_MIN_VER} or above manually."
+    exit 1
   fi
-  if [[ -n "$jqbin" ]]; then
-    jq="/usr/local/bin/jq16"
-    wget -nv -O $jq https://github.com/jqlang/jq/releases/download/jq-1.6/$jqbin
-    chmod 755 $jq
-  fi
+  jq="/usr/local/bin/jq16"
+  wget -nv -O $jq https://github.com/jqlang/jq/releases/download/jq-${JQ_MIN_VER}/$jqbin
+  chmod 755 $jq
+}
+
+if [[ "$INSTALL_JQ" == "1" ]] || ! check_jq; then
+  echo "* jq ${JQ_MIN_VER} or above is required but not found. Installing jq ${JQ_MIN_VER}..."
+  install_jq
 fi
 
 # Slurp paths from file
