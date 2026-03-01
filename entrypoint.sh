@@ -50,7 +50,7 @@ fi
 
 # Ensure we have jq-1.6
 jq="jq"
-if [[ ! -x "$(command -v $jq)" || "$($jq --version)" != "jq-1.6" ]]; then
+if [[ "$INSTALL_JQ" == "1" || ! -x "$(command -v $jq)" || "$($jq --version)" != "jq-1.6" ]]; then
   if [[ $(uname) == "Darwin" ]]; then
     jqbin="jq-osx-amd64"
   elif [[ $(uname) == "Linux" ]]; then
