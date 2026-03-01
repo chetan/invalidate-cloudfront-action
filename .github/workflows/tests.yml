@@ -11,6 +11,10 @@ on:
         description: "Branch to run tests on"
         required: false
         default: "test"
+      install_jq:
+        description: "Whether to force install jq (for testing purposes)"
+        required: false
+        default: ""
 
 jobs:
   tests:
@@ -22,7 +26,7 @@ jobs:
 
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
         with:
           ref: "${{ inputs.branch }}"
 
@@ -44,6 +48,7 @@ jobs:
           AWS_REGION: "us-east-1"
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          INSTALL_JQ: "${{ inputs.install_jq }}"
 
       - name: create path files
         shell: bash
@@ -78,7 +83,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: configure aws credentials (access key)
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -92,7 +97,7 @@ jobs:
           DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
 
       - name: configure aws credentials (oidc)
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           role-session-name: TestSessionName
