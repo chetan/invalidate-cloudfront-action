@@ -1,5 +1,9 @@
 # Invalidate AWS CloudFront Action Changelog
 
+## v2.4.2
+
+- fixed jq version check (require min 1.6)
+
 ## v2.4.1
 
 ### Fixes
